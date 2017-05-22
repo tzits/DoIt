@@ -30,13 +30,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = UITableViewCell()
         let task = tasks[indexPath.row]
         if task.important {
-            cell.textLabel?.text = "❗️/(task.name)"
+            cell.textLabel?.text = "❗️\(task.name)"
         } else {
         cell.textLabel?.text = task.name
         }
         return cell
     }
     
+
     func makeTasks() -> [Task] {
         let task1 = Task()
         task1.name = "Go Running"
@@ -50,6 +51,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         task3.important = true
         
         return [task1,task2,task3]
+    }
+    
+    @IBAction func plusTapped(_ sender: Any) {
+        performSegue(withIdentifier: "addSegue", sender: nil)
     }
 }
 
