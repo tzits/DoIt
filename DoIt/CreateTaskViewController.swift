@@ -14,7 +14,7 @@ class CreateTaskViewController: UIViewController {
     
     @IBOutlet weak var important: UISwitch!
     
-    var previousVC = ViewController()
+    var previousVC = TasksViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +25,10 @@ class CreateTaskViewController: UIViewController {
         let task = Task()
         task.name = taskNameTextField.text!
         task.important = important.isOn
+        
+        previousVC.tasks.append(task)
+        previousVC.DoItTable.reloadData()
+        navigationController?.popViewController(animated: true)
     }
 
 

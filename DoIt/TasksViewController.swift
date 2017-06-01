@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TasksViewController.swift
 //  DoIt
 //
 //  Created by Toby Zitsman on 5/21/17.
@@ -8,11 +8,13 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TasksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var DoItTable: UITableView!
     
     var tasks : [Task] = []
+    var selectedIndex = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -32,11 +34,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if task.important {
             cell.textLabel?.text = "❗️\(task.name)"
         } else {
-        cell.textLabel?.text = task.name
+            cell.textLabel?.text = task.name
         }
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        
+        selectedIndex = indexPath.row
+        
+        let task = tasks[indexPath.row]
+        performSegue(withIdentifier: "selectTaskSegue", sender: task)
+    }
 
     func makeTasks() -> [Task] {
         let task1 = Task()
@@ -53,8 +62,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return [task1,task2,task3]
     }
     
-    @IBAction func plusTapped(_ sender: AnyObject) {
+    @IBAction func plusTapped(_ sender: Any?) {
         performSegue(withIdentifier: "addSegue", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addSegue" {
+            let nextVC = segue.destination as! CreateTaskViewController
+            nextVC.previousVC = self
+        }
+        if segue.identifier == "selectTaskSegue" {
+            let nextVC = segue.destination as! CompleteTaskViewController
+            nextVC.task = sender as! Task
+            nextVC.previousVC = self
+        }
     }
 }
 
